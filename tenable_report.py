@@ -384,10 +384,10 @@ def _risk_summary(report: ScanReport, comparison: Comparison) -> str:
             f"<td>{affected_hosts}</td><td>{new_count}</td></tr>"
         )
     if not rows:
-        rows.append('<tr><td colspan="4">Aucune vulnérabilité dans les sévérités incluses.</td></tr>')
+        rows.append('<tr><td colspan="4">No vulnerabilities found for the selected severities.</td></tr>')
     return (
-        "<h4>Vulnérabilités par niveau de risque</h4><div class=\"table-wrap\"><table><thead><tr>"
-        "<th>Risque</th><th>Total actif</th><th>Hôtes touchés</th><th>Nouvelles</th>"
+        "<h4>Vulnerabilities by risk level</h4><div class=\"table-wrap\"><table><thead><tr>"
+        "<th>Risk</th><th>Active total</th><th>Hosts affected</th><th>New</th>"
         "</tr></thead><tbody>" + "".join(rows) + "</tbody></table></div>"
     )
 
@@ -461,14 +461,14 @@ def _chart_data_uri(comparisons: list[Comparison]) -> str:
     for axis, title, ylabel, series in (
         (
             axes[0],
-            "Vulnérabilités actives : nouvelles + persistantes",
-            "Nombre de vulnérabilités",
-            (("Nouvelles", new_counts, "#e67e22"), ("Persistantes", persistent_counts, "#2980b9")),
+            "Active vulnerabilities: new + persistent",
+            "Number of vulnerabilities",
+            (("New", new_counts, "#e67e22"), ("Persistent", persistent_counts, "#2980b9")),
         ),
         (
             axes[1],
-            "Vulnérabilités actives par niveau de risque",
-            "Nombre de vulnérabilités",
+            "Active vulnerabilities by risk level",
+            "Number of vulnerabilities",
             tuple(
                 (risk, risk_counts[risk], color)
                 for risk, color in zip(risks, ("#8e44ad", "#c0392b", "#e67e22", "#f1c40f", "#7f8c8d"))
@@ -476,12 +476,12 @@ def _chart_data_uri(comparisons: list[Comparison]) -> str:
         ),
         (
             axes[2],
-            "Hôtes touchés : nouvelles + persistantes",
-            "Nombre d'hôtes uniques",
+            "Affected hosts: new + persistent",
+            "Number of unique hosts",
             (
-                ("Nouvelles uniquement", host_counts[0], "#e67e22"),
-                ("Persistantes uniquement", host_counts[1], "#2980b9"),
-                ("Nouvelles et persistantes", host_counts[2], "#27ae60"),
+                ("New only", host_counts[0], "#e67e22"),
+                ("Persistent only", host_counts[1], "#2980b9"),
+                ("Both new and persistent", host_counts[2], "#27ae60"),
             ),
         ),
     ):
@@ -511,19 +511,19 @@ def render_html(reports: list[ScanReport], comparisons: list[Comparison]) -> str
         total_findings, total_hosts = _metric(report.findings.values())
         sections.append(
             f"<section><h3>{_escape(report.label)}</h3>"
-            f"<p>Rapport : <code>{_escape(str(report.source))}</code> — "
-            f"{total_findings} vulnérabilités actives sur {total_hosts} hôtes.</p>"
+            f"<p>Source report: <code>{_escape(str(report.source))}</code> — "
+            f"{total_findings} active vulnerabilities across {total_hosts} hosts.</p>"
             f"{_risk_summary(report, comparison)}"
-            "<div class=\"table-wrap\"><table><thead><tr><th>Catégorie</th>"
-            "<th>Vulnérabilités</th><th>Hôtes</th></tr></thead><tbody>"
+            "<div class=\"table-wrap\"><table><thead><tr><th>Category</th>"
+            "<th>Vulnerabilities</th><th>Hosts</th></tr></thead><tbody>"
             f"{_summary_rows(comparison)}</tbody></table></div>"
             f"{_group_breakdown(comparison)}</section>"
         )
 
     return (
-        "<!doctype html><html lang=\"fr\"><head><meta charset=\"utf-8\">"
+        "<!doctype html><html lang=\"en\"><head><meta charset=\"utf-8\">"
         "<meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">"
-        "<title>Évolution des vulnérabilités Tenable</title><style>"
+        "<title>Tenable Vulnerability Trends</title><style>"
         "body{font:16px/1.5 system-ui,sans-serif;color:#202938;background:#f4f6f8;"
         "margin:0;padding:2rem}main{max-width:1100px;margin:auto;background:white;"
         "padding:2rem;border-radius:12px;box-shadow:0 2px 12px #17202a18}"
@@ -532,19 +532,20 @@ def render_html(reports: list[ScanReport], comparisons: list[Comparison]) -> str
         ".table-wrap{overflow-x:auto}table{border-collapse:collapse;width:100%;margin:1rem 0}"
         "th,td{border:1px solid #dce3ea;padding:.55rem;text-align:left}"
         "thead{background:#eaf0f5}code{overflow-wrap:anywhere}.note{color:#526273}"
-        "</style></head><body><main><h1>Évolution des vulnérabilités Tenable</h1>"
-        "<p class=\"note\">Les rapports sont comparés de proche en proche. "
-        "L'identité d'une vulnérabilité est le quadruplet IP, port, Plugin ID et CVE. "
-        "Le premier rapport sert de référence : toutes ses vulnérabilités sont classées comme nouvelles. "
-        "Les éléments corrigés sont attribués au site et au propriétaire du rapport précédent ; "
-        "les autres catégories utilisent les métadonnées du rapport courant.</p>"
-        "<h2>Tendances</h2>"
-        f"<img alt=\"Trois diagrammes empilés : vulnérabilités nouvelles et persistantes, "
-        f"vulnérabilités par risque et hôtes touchés\" src=\"{image_uri}\">"
-        "<h2>Synthèse par version</h2>"
-        "<div class=\"table-wrap\"><table><thead><tr><th>Version</th><th>Vulnérabilités actives</th>"
-        "<th>Hôtes actifs</th><th>Nouvelles vulnérabilités</th><th>Hôtes nouveaux</th>"
-        "<th>Persistantes</th><th>Hôtes persistants</th><th>Corrigées</th><th>Hôtes corrigés</th>"
+        "</style></head><body><main><h1>Tenable Vulnerability Trends</h1>"
+        "<p class=\"note\">Reports are compared sequentially, with each scan compared to the previous one. "
+        "A vulnerability is identified by the tuple IP address, port, Plugin ID, and CVE. "
+        "The first report is the baseline, so all of its findings are classified as new. "
+        "Fixed findings are attributed to the site and owner from the previous report; "
+        "other categories use metadata from the current report.</p>"
+        "<h2>Trends</h2>"
+        f"<img alt=\"Three stacked charts: new and persistent vulnerabilities, "
+        f"vulnerabilities by risk, and affected hosts\" src=\"{image_uri}\">"
+        "<h2>Summary by scan</h2>"
+        "<div class=\"table-wrap\"><table><thead><tr><th>Scan</th><th>Active vulnerabilities</th>"
+        "<th>Active hosts</th><th>New vulnerabilities</th><th>Hosts with new findings</th>"
+        "<th>Persistent vulnerabilities</th><th>Hosts with persistent findings</th>"
+        "<th>Fixed vulnerabilities</th><th>Hosts with fixed findings</th>"
         "</tr></thead><tbody>"
         + "".join(
             f"<tr><th>{_escape(report.label)}</th>"
@@ -557,7 +558,7 @@ def render_html(reports: list[ScanReport], comparisons: list[Comparison]) -> str
             + "</tr>"
             for report, comparison in zip(reports, comparisons)
         )
-        + "</tbody></table></div><h2>Détails par site et propriétaire</h2>"
+        + "</tbody></table></div><h2>Details by site and owner</h2>"
         + "".join(sections)
         + "</main></body></html>"
     )
@@ -669,7 +670,7 @@ def export_excel(reports: list[ScanReport], comparisons: list[Comparison], outpu
 
 def _summary_rows(comparison: Comparison) -> str:
     rows = []
-    for title, name in (("Nouvelles", "new"), ("Persistantes", "persistent"), ("Corrigées", "fixed")):
+    for title, name in (("New", "new"), ("Persistent", "persistent"), ("Fixed", "fixed")):
         count, hosts = _metric(getattr(comparison, name))
         rows.append(f"<tr><th>{title}</th><td>{count}</td><td>{hosts}</td></tr>")
     return "".join(rows)
@@ -683,7 +684,7 @@ def _group_breakdown(comparison: Comparison) -> str:
         for finding in getattr(comparison, category):
             grouped[(finding.site, finding.owner)][category].append(finding)
     if not grouped:
-        return "<p>Aucune vulnérabilité classée pour cette version.</p>"
+                return "<p>No findings to classify for this scan.</p>"
     rows = []
     for (site, owner), values in sorted(grouped.items()):
         metrics = [_metric(values[name]) for name in ("new", "persistent", "fixed")]
@@ -694,9 +695,10 @@ def _group_breakdown(comparison: Comparison) -> str:
             + "</tr>"
         )
     return (
-        "<h4>Détail par site / propriétaire</h4><div class=\"table-wrap\"><table><thead><tr>"
-        "<th>Site</th><th>Propriétaire</th><th>Nouvelles</th><th>Hôtes nouveaux</th>"
-        "<th>Persistantes</th><th>Hôtes persistants</th><th>Corrigées</th><th>Hôtes corrigés</th>"
+        "<h4>Breakdown by site / owner</h4><div class=\"table-wrap\"><table><thead><tr>"
+        "<th>Site</th><th>Owner</th><th>New</th><th>Hosts with new findings</th>"
+        "<th>Persistent</th><th>Hosts with persistent findings</th>"
+        "<th>Fixed</th><th>Hosts with fixed findings</th>"
         "</tr></thead><tbody>" + "".join(rows) + "</tbody></table></div>"
     )
 

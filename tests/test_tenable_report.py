@@ -162,18 +162,18 @@ class ComparisonTests(unittest.TestCase):
             workbook = openpyxl.load_workbook(output, read_only=True, data_only=True)
             self.assertEqual(workbook.sheetnames, ["Synthèse", "Synthèse par risque", "Détails"])
             summary = workbook["Synthèse"]
-            self.assertEqual(summary["A2"].value, "Janvier 2024")
+            self.assertEqual(summary["A2"].value, "January 2024")
             self.assertEqual(summary["C2"].value, 2)
             risk_rows = list(workbook["Synthèse par risque"].iter_rows(values_only=True))
-            self.assertIn(("Janvier 2024", "High", 1, 1, 1), risk_rows)
+            self.assertIn(("January 2024", "High", 1, 1, 1), risk_rows)
             detail_rows = list(workbook["Détails"].iter_rows(values_only=True))
             self.assertIn(
-                ("Février 2024", "Nouvelle", "Medium", "10.0.0.1", "80", "1004",
+                ("February 2024", "Nouvelle", "Medium", "10.0.0.1", "80", "1004",
                  "CVE-2024-0004", "Lyon", "Sec"),
                 detail_rows,
             )
             self.assertIn(
-                ("Février 2024", "Corrigée", "Critical", "10.0.0.2", "22", "1002",
+                ("February 2024", "Corrigée", "Critical", "10.0.0.2", "22", "1002",
                  "CVE-2024-0002", "Paris", "Ops"),
                 detail_rows,
             )
@@ -248,6 +248,11 @@ class ComparisonTests(unittest.TestCase):
             tenable_report.compare_reports([altered, reports[1], reports[2]]),
         )
         self.assertIn("data:image/png;base64,", document)
+        self.assertIn('<html lang="en">', document)
+        self.assertIn("<h2>Trends</h2>", document)
+        self.assertIn("<th>Active vulnerabilities</th>", document)
+        self.assertIn("Breakdown by site / owner", document)
+        self.assertNotIn("Vulnérabilités actives", document)
         self.assertIn("&lt;script&gt;", document)
         self.assertNotIn("<script>alert(1)</script>", document)
         self.assertNotIn('src="tenable_report', document)

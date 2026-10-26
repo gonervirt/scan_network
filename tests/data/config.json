@@ -2,17 +2,17 @@
   "reports": [
     {
       "path": "scan_2024-01.csv",
-      "label": "Janvier 2024",
+      "label": "January 2024",
       "site": "Paris",
       "owner": "Équipe réseau"
     },
     {
       "path": "scan_2024-02.csv",
-      "label": "Février 2024"
+      "label": "February 2024"
     },
     {
       "path": "scan_2024-03.csv",
-      "label": "Mars 2024",
+      "label": "March 2024",
       "site": "Lyon",
       "owner": "Équipe sécurité"
     }

@@ -75,8 +75,10 @@ Le script génère le rapport HTML et un classeur Excel `.xlsx` portant le même
 de base. Le classeur contient les feuilles `Synthèse`, `Synthèse par risque` et
 `Détails` (vulnérabilités nouvelles, persistantes et corrigées). Pour choisir son
 emplacement, utiliser `--excel-output .\results\tenable_results.xlsx`. La page HTML
-produite contient ses graphiques PNG en base64 et ne dépend d'aucun fichier image
-ou script externe. Adapter la configuration et ses chemins relatifs pour analyser
+produite est en anglais, contient ses graphiques PNG en base64 et ne dépend d'aucun
+fichier image ou script externe. Les libellés des scans et les métadonnées de site
+ou propriétaire sont repris tels quels depuis la configuration ou les fichiers.
+Adapter la configuration et ses chemins relatifs pour analyser
 vos propres exports. Pour un classeur contenant plusieurs feuilles,
 ajouter `"sheet": "NomDeLaFeuille"` à l'entrée du rapport ; sans cette option,
 la feuille active est utilisée. Les fichiers Excel `.xls` historiques ne sont pas
