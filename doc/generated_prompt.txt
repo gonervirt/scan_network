@@ -1,0 +1,29 @@
+Agis comme un développeur Python senior. Conçois une application en Python pour inventorier des services sur un réseau interne ou un ensemble d’adresses dont l’opérateur a l’autorisation explicite de réaliser le scan.
+
+Périmètre et garde-fous
+- Accepte en entrée un ou plusieurs CIDR, ou un fichier texte contenant une adresse IP par ligne.
+- N’effectue aucun scan hors des plages explicitement fournies et autorisées. Affiche le périmètre détecté et demande une confirmation avant de démarrer.
+- Prévois une liste d’exclusion, une limite configurable du nombre d’hôtes, une concurrence modérée et une limitation du débit. Utilise des délais d’attente et des tentatives de connexion bornés.
+- Ne tente ni exploitation, ni authentification, ni contournement de filtrage, ni dissimulation du trafic. Ne parcours pas les sites web.
+- Permets d’interrompre proprement le scan et de le reprendre sans perdre les résultats déjà enregistrés.
+
+Déroulement
+1. Valide et normalise les entrées, élimine les doublons et vérifie que les adresses sont dans le périmètre autorisé.
+2. Réalise une première passe légère sur les 10 ports TCP les plus courants, configurables par l’opérateur.
+3. Pour chaque port détecté ouvert, effectue uniquement des vérifications non intrusives afin de relever, lorsque c’est possible :
+   - l’adresse IP et le port ;
+   - le protocole et le service présumé ;
+   - la bannière ou la version annoncée, sans tenter d’interaction dangereuse ;
+   - les métadonnées du certificat TLS : sujet, émetteur, dates de validité et noms DNS ;
+   - le nom DNS obtenu par résolution inverse, en indiquant qu’il peut être absent ou inexact ;
+   - pour HTTP et HTTPS, le code de réponse, le titre de la page et une capture de la page d’accueil, sans suivre de liens.
+4. Enregistre les résultats au fil de l’eau dans un CSV, avec une ligne par couple IP/port. Inclue aussi la date du scan, le statut, les champs non disponibles laissés vides et un message d’erreur concis si nécessaire.
+5. Crée un répertoire de travail configurable. Range-y les journaux et les captures dans une arborescence déterministe par adresse IP, en neutralisant les caractères qui pourraient rendre les chemins invalides. Évite d’écraser les résultats précédents sans confirmation.
+
+Qualité attendue
+- Utilise des bibliothèques Python maintenues et documente les dépendances.
+- Sépare clairement la validation des entrées, l’ordonnancement, les sondes réseau et l’export des résultats.
+- Gère les erreurs réseau et les interruptions sans arrêter tout le traitement.
+- Fournis une interface en ligne de commande avec options pour les CIDR, le fichier d’IP, le CSV de sortie, le répertoire de travail, les exclusions, le débit et la concurrence.
+- Ajoute des tests pour la validation des entrées, les exclusions, la création des chemins et l’export CSV. Les tests ne doivent pas scanner de réseau réel.
+- Fournis un README en français avec les prérequis, des exemples d’utilisation sur un réseau de test autorisé et les limites de détection.

@@ -1,0 +1,1 @@
+scan_time,ip,port,status,service,banner,fqdn,tls_subject,tls_issuer,tls_valid_from,tls_valid_to,tls_dns_names,http_status,http_title,snapshot_path,error

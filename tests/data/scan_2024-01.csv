@@ -1,0 +1,5 @@
+Asset IP,Service Port,Plugin,CVE,Risk,Location,Team
+10.0.0.1,443,1001,CVE-2024-0001,High,Paris,Ops
+10.0.0.1,443,1001,CVE-2024-0001,High,Paris,Ops
+10.0.0.2,22,1002,CVE-2024-0002,Critical,Paris,Ops
+10.0.0.3,80,1003,CVE-2024-0003,Low,Paris,Ops

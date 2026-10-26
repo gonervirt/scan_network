@@ -1,0 +1,45 @@
+Rôle : Tu es un expert en développement Python et en cybersécurité, spécialisé dans l'automatisation du reporting et l'analyse de vulnérabilités.
+
+Objectif : Écris un script Python complet, robuste, testé et modulaire permettant d'analyser et de comparer l'évolution des rapports de scan de vulnérabilités Tenable au format CSV sur plusieurs versions chronologiques.
+
+### 1. Entrées et Fichier de Configuration
+- Le script doit s'appuyer sur un fichier de configuration externe (au format JSON ou YAML, ex: `config.json`).
+- Le fichier de configuration doit définir :
+  1. Une liste ordonnée (chronologique) des chemins vers les fichiers CSV des rapports de scan, accompagnée éventuellement des métadonnées optionnelles `site` et `owner`.
+  2. Le mapping des colonnes CSV (noms des en-têtes configurables pour l'adresse IP, le Port, le Plugin ID, la CVE, la Sévérité, et optionnellement le Site et le Owner).
+  3. Les filtres de sévérité à inclure dans l'analyse (ex: ["Critical", "High", "Medium"]).
+
+### 2. Logique de Traitement et de Comparaison
+- Chargement et nettoyage des données CSV en respectant les filtres de sévérité configurés.
+- Définition stricte de l'unicité (duplication/matching) d'une vulnérabilité basée sur le quadruplet : [IP, Port, Plugin ID, CVE].
+- Comparaison séquentielle des rapports (de proche en proche ou par rapport au premier scan de référence) pour calculer les métriques suivantes (en nombre absolu de vulnérabilités et en nombre d'hôtes/adresses IP uniques touchés) :
+  - Nouvelles vulnérabilités apparues (New)
+  - Vulnérabilités persistantes / non corrigées (Unfixed / Persistent)
+  - Vulnérabilités corrigées (Fixed)
+
+### 3. Rendu et Sortie (HTML Statique)
+- Génération d'une page HTML unique et propre, entièrement autonome.
+- Intégration d'un rendu graphique statique (graphiques générés via `matplotlib` convertis en images encastrées en base64) pour visualiser l'évolution des métriques à chaque version de scan.
+- Structuration claire du rapport HTML (synthèse globale, détails par site / owner si configurés, et tendances d'évolution).
+
+### 4. Tests Unitaires et Jeux de Données (Crucial)
+- Fournir un fichier de tests unitaires (ex: via `pytest` ou `unittest`) couvrant :
+  - Le parsing correct des fichiers CSV avec le mapping dynamique.
+  - Le filtrage par sévérité.
+  - La logique de calcul des deltas (vérification mathématique des nouveaux, persistants et corrigés sur des cas simples).
+- Fournir un **jeu de données de test** (2 ou 3 mini fichiers CSV fictifs représentatifs de scans successifs) et un exemple de fichier `config.json` associé pour permettre de valider et exécuter le script immédiatement.
+
+### 5. Qualité du code
+- Utilisation de bibliothèques standards ou robustes (ex: `pandas`, `matplotlib`).
+- Gestion propre des erreurs (fichiers introuvables, colonnes manquantes dans le CSV, format de fichier incorrect).
+- Commentaires explicites en français dans le code.
+
+
+
+les diagrammes suivant vont etre affiches
+diagram 1: presentation en diagramme à barres empilées
+ - le nombre totale de vulnerabilite (nouveau + peristants)
+diagram 2: presentation en diagramme à barres empilées
+ - le nombre totale de vulnerabilite critique, high, medium...
+diagram 3: presentation en diagramme à barres empilées
+ - le nombre totale de hote (nouveau + peristants)

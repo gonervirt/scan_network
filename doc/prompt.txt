@@ -1,0 +1,4 @@
+peux tu me donner un prompt pour une application en python pour  scanner des reseau tres grand. 
+En entree un cidr ou un fichier contenant des IP. Le script devra d'abord faire un quick scan sur les  10 ports les plus utilises, puis une fois la liste établis, faire scan complet pour trouver la version, le certifcats, le fqdn, un snapshot du site web. 
+Le resultat devra etre synthetise dans une fichier csv, contenant pour chaque ligne l'ip, le port, et le reésultat du scan detaillé. 
+Tous les fichiers intermediaire seront range dans un repertoire intermediaire, avec des noms  / repertoire faisant reference a l'ip.

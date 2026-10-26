@@ -1,0 +1,31 @@
+{
+  "reports": [
+    {
+      "path": "scan_2024-01.csv",
+      "label": "Janvier 2024",
+      "site": "Paris",
+      "owner": "Équipe réseau"
+    },
+    {
+      "path": "scan_2024-02.csv",
+      "label": "Février 2024"
+    },
+    {
+      "path": "scan_2024-03.csv",
+      "label": "Mars 2024",
+      "site": "Lyon",
+      "owner": "Équipe sécurité"
+    }
+  ],
+  "columns": {
+    "ip": "Asset IP",
+    "port": "Service Port",
+    "plugin_id": "Plugin",
+    "cve": "CVE",
+    "severity": "Risk",
+    "site": "Location",
+    "owner": "Team"
+  },
+  "severity_include": ["Critical", "High", "Medium"],
+  "output_html": "../../tenable_report.html"
+}

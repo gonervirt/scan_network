@@ -1,0 +1,3 @@
+Asset IP,Service Port,Plugin,CVE,Risk,Location,Team
+10.0.0.1,80,1004,CVE-2024-0004,High,Lyon,Sec
+10.0.0.5,443,1006,CVE-2024-0006,Critical,Lyon,Sec
